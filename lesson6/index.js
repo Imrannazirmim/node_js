@@ -1,0 +1,32 @@
+const http = require('http');
+const fs = require('fs');
+const port = 8000;
+const hostname = '127.0.0.1';
+
+const server = http.createServer((req, res) => {
+
+    const handleReadFile = (statusCode, fileType)=>{
+        fs.readFile(fileType, (err, data) => {
+            res.writeHead(statusCode, { 'Content-Type': 'text/html' })
+            res.write(data);
+            res.end()
+        })
+    }
+
+    if(req.url === '/'){
+       handleReadFile(200, 'index.html')
+    }else if(req.url === '/contact'){
+        handleReadFile(200, 'contact.html')
+
+    }else if(req.url === '/about'){
+        handleReadFile(200, 'about.html')
+
+    }else{
+        handleReadFile(404, 'error.html')
+
+    }
+})
+
+server.listen(port, hostname, ()=>{
+    console.log(`http:${hostname}:${port}`)
+})
